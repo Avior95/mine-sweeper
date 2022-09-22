@@ -1,11 +1,12 @@
 'use strict'
-const MINE = 'MINE'
-// const MINE_IMG = '💣'
+const MINE = '💣'
+
+var gBoard;
 
 var gLevel = {
     SIZE: 4,
     MINES: 2
-};
+}
 
 var gGame = {
     isOn: false,
@@ -14,59 +15,102 @@ var gGame = {
     secsPassed: 0
 }
 
-var gBoard;
 
 function initGame() {
     gBoard = buildBoard()
     console.table(gBoard)
-    // renderBoard(gBoard)
+    renderBoard(gBoard)
 
 }
 
 function buildBoard() {
-
     const board = []
     for (var i = 0; i < gLevel.SIZE; i++) {
         board.push([])
+
         for (var j = 0; j < gLevel.SIZE; j++) {
-            const cell = board[i][j]
-            cell = {
+            const cell = {
                 minesAroundCount: 0,
                 isShown: true,
                 isMine: false,
-                isMarked: true,
-                gameElement: null,
+                isMarked: true
             }
-
+            board[i][j] = cell
         }
     }
-    board[1][1].gameElement = MINE
-    board[2][2].gameElement = MINE
+
+    board[1][2].isMine = true
+    board[2][1].isMine = true
+    // setMinesRandomly()
     return board
 }
 
+
+
 // Render the board to an HTML table
-// function renderBoard(board) {
+function renderBoard(board) {
 
-//     var strHTML = ''
+    var strHTML = ''
 
-//     for (var i = 0; i < board.length; i++) {
-//         strHTML += '<tr>\n'
-//         for (var j = 0; j < board[0].length; j++) {
-//             strHTML += `\t<td onclick="cellClicked(this, ${i}, ${j})"></td>\n`
+    for (var i = 0; i < board.length; i++) {
+        strHTML += '<tr>\n'
+        for (var j = 0; j < board[0].length; j++) {
+            var currCell = board[i][j]
+            var val = currCell.isMine ? MINE : setMinesNegsCount(currCell)
+            strHTML += `\t<td onclick="cellClicked(this, ${i}, ${j})">${val}</td>\n`
 
-//         }
-//         strHTML += '</tr>\n'
-//     }
-//     var elBoard = document.querySelector('.board')
-//     elBoard.innerHTML = strHTML
-//     console.log(strHTML);
+        }
+        strHTML += '</tr>\n'
+    }
+    var elBoard = document.querySelector('.board')
+    elBoard.innerHTML = strHTML
+    console.log(strHTML);
 
-// }
+}
+
+
+function setMinesNegsCount(cellI, cellJ, mat) {
+
+    var setMinesNegsCount = 0
+
+    for (var i = cellI - 1; i <= cellI + 1; i++) {
+        if (i < 0 || i >= mat.length) continue;
+        for (var j = cellJ - 1; j <= cellJ + 1; j++) {
+            if (j < 0 || j >= mat[i].length) continue;
+            if (i === cellI && j === cellJ) continue;
+            if (mat[i][j] === MINE) setMinesNegsCount++;
+        }
+    }
+    return setMinesNegsCount;
+
+}
 
 
 
-function cellClicked(elCell, cellI, cellJ) {
+function cellClicked(elCell, i, j) {
+    console.log('elCell:', elCell, i, j);
+    console.log(gBoard[i][j]);
+
+
+}
+
+
+
+function cellMarked(elCell) {
+
+
+
+}
+
+
+function checkGameOver() {
+
+
+}
+
+
+function expandShown(board, elCell, i, j) {
+
 
 
 
@@ -74,24 +118,20 @@ function cellClicked(elCell, cellI, cellJ) {
 }
 
 
-// if (elCell.innerText === LIFE) {
-//     // Update the model
-//     gBoard[cellI][cellJ] = SUPER_LIFE
 
-//     // Update the DOM
-//     elCell.innerText = SUPER_LIFE
 
-//     blowupNegs(cellI, cellJ)
 
+// function setMinesRandomly() {
+    //  getting random indexes rely on gLevel.mines
+
+    // place mines in these random indexed
+
+    // first update model than dom (gboard and then render)
 // }
 
 
 
 
-    // if (currCell === MINE) {
-            //     currCell.isMine === true
-            //     currCell.gameElement === MINE_IMG
-            // }
 
 
 
@@ -124,6 +164,74 @@ function cellClicked(elCell, cellI, cellJ) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// for (var i = 0; i < gLevel.SIZE; i++) {
+//     board.push([])
+//     for (var j = 0; j < gLevel.SIZE; j++) {
+//         board[i][j] = {
+//             minesAroundCount: 0,
+//             isShown: true,
+//             isMine: false,
+//             isMarked: true,
+//         }
+
+//     }
+// }
 
 
 
